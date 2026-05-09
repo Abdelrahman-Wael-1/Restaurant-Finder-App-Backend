@@ -1,8 +1,9 @@
 const { Pool } = require('pg');
 
+// Railway always needs SSL — always enable it when DATABASE_URL is set
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('railway')
+  ssl: process.env.DATABASE_URL
     ? { rejectUnauthorized: false }
     : false,
 });
