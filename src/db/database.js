@@ -1,6 +1,5 @@
 const { Pool } = require('pg');
 
-// Railway always needs SSL — always enable it when DATABASE_URL is set
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.DATABASE_URL
@@ -8,13 +7,11 @@ const pool = new Pool({
     : false,
 });
 
-// ── Create all tables and seed data if empty ─────────────────────────────────
 async function initDb() {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
 
-    // ── Users table ──────────────────────────────────────────────────────────
     await client.query(`
       CREATE TABLE IF NOT EXISTS users (
         id        SERIAL PRIMARY KEY,
@@ -27,7 +24,6 @@ async function initDb() {
       );
     `);
 
-    // ── Restaurants table ────────────────────────────────────────────────────
     await client.query(`
       CREATE TABLE IF NOT EXISTS restaurants (
         id            TEXT PRIMARY KEY,
@@ -46,7 +42,6 @@ async function initDb() {
       );
     `);
 
-    // ── Products table ───────────────────────────────────────────────────────
     await client.query(`
       CREATE TABLE IF NOT EXISTS products (
         id            TEXT PRIMARY KEY,
@@ -59,7 +54,6 @@ async function initDb() {
       );
     `);
 
-    // ── Seed restaurants (only if table is empty) ────────────────────────────
     const { rows: rCount } = await client.query('SELECT COUNT(*) FROM restaurants');
     if (parseInt(rCount[0].count) === 0) {
       await client.query(`
@@ -98,7 +92,6 @@ async function initDb() {
            'Greek','restaurant',30.038800,31.212400,'+20 2 3361 0000','Mon–Sun: 11:00 AM – 10:30 PM');
       `);
 
-      // ── Seed products ──────────────────────────────────────────────────────
       await client.query(`
         INSERT INTO products VALUES
           ('p1','r1','Grilled Salmon','Atlantic salmon fillet with herb butter and vegetables',185.00,'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400','Main Course'),

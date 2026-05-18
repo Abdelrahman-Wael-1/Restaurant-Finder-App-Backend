@@ -22,8 +22,6 @@ function mapRestaurant(row) {
   };
 }
 
-// ── GET /search/products ──────────────────────────────────────────────────────
-// Returns all distinct product names (for the search dropdown)
 router.get('/products', authMiddleware, async (req, res) => {
   try {
     const result = await pool.query(
@@ -36,8 +34,6 @@ router.get('/products', authMiddleware, async (req, res) => {
   }
 });
 
-// ── GET /search?name=<productName> ────────────────────────────────────────────
-// Returns restaurants that serve the given product
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const { name } = req.query;

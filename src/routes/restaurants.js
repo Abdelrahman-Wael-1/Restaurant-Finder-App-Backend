@@ -4,7 +4,6 @@ const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
-// Helper to map DB row → Flutter model shape
 function mapRestaurant(row) {
   return {
     id: row.id,
@@ -35,7 +34,6 @@ function mapProduct(row) {
   };
 }
 
-// ── GET /restaurants ──────────────────────────────────────────────────────────
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM restaurants ORDER BY name');
@@ -46,7 +44,6 @@ router.get('/', authMiddleware, async (req, res) => {
   }
 });
 
-// ── GET /restaurants/:id ──────────────────────────────────────────────────────
 router.get('/:id', authMiddleware, async (req, res) => {
   try {
     const result = await pool.query(
@@ -63,7 +60,6 @@ router.get('/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// ── GET /restaurants/:id/products ─────────────────────────────────────────────
 router.get('/:id/products', authMiddleware, async (req, res) => {
   try {
     const result = await pool.query(

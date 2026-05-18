@@ -10,26 +10,21 @@ const searchRoutes = require('./routes/search');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
 
-// ── Routes ────────────────────────────────────────────────────────────────────
 app.use('/auth', authRoutes);
 app.use('/restaurants', restaurantRoutes);
 app.use('/search', searchRoutes);
 
-// ── Health check ──────────────────────────────────────────────────────────────
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// ── 404 handler ───────────────────────────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({ message: `Route ${req.method} ${req.path} not found` });
 });
 
-// ── Start ─────────────────────────────────────────────────────────────────────
 async function start() {
   try {
     await initDb();
